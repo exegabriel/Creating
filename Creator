@@ -1,0 +1,50 @@
+local Functions={};
+Functions.HttpGet=function(_,Link)
+    local _=nil;
+    return loadstring(game:HttpGet(Link,true))(_);
+end;
+local Https={
+    UICreater=Functions.HttpGet('https://raw.githubusercontent.com/exegabriel/UICreator/main/UICreater?token=GHSAT0AAAAAAB5C2FA4OSVT4Z6XR3KOPVLAY72O4YA');
+    Achievements=Functions.HttpGet('https://raw.githubusercontent.com/exegabriel/UICreator/main/Achievements?token=GHSAT0AAAAAAB5C2FA4RI4P2MZGA33T24H6Y72P2PQ');
+    ItemShop=Functions.HttpGet('https://raw.githubusercontent.com/exegabriel/UICreator/main/Items?token=GHSAT0AAAAAAB5C2FA4IQU4IWRRPMNSVRZIY72P3BA');
+    Functions=Functions.HttpGet('https://raw.githubusercontent.com/exegabriel/UICreator/main/Functions?token=GHSAT0AAAAAAB5C2FA4GROMM2CENS3LRDV4Y72PXSA');
+end;
+local TweenService=game:GetService'TweenService';
+local UI={};
+UI.Create=function(Class,Properties,Radius)
+    local Instance=Instance.new(Class);
+    for i,Properties in next,Properties do
+        if i~='Parent' then
+            if typeof(Properties)=='Instance' then
+                Properties.Parent=Instance;
+            else
+                Instance[i]=Properties;
+            end;
+        end;
+    end;
+    if Radius then
+        local UICorner=Instance.new('UICorner',Instance);
+        UICorner.CornerRadius=Radius;
+    end;
+    return Instance;
+end;
+UI.MakeDraggable=function(Object,Drag,Smoothness)
+    local StartPosition,Dragging=nil,false;
+    Drag.InputBegan:Connect(function(Input)
+        if Input.UserInputType==Enum.UserInputType.MouseButton1 then
+            Dragging=true;
+            StartPosition=Vector2.new(Mouse.X-Object.AbsolutePosition.X,Mouse.Y-Object.AbsolutePosition.Y);
+        end;
+    end);
+    Drag.InputEnded:Connect(function(Input)
+        if Input.UserInputType==Enum.UserInputType.MouseButton1 then
+            Dragging=false;
+        end;
+    end);
+    Mouse.Move:Connect(function()
+        if Dragging then
+            TweenService:Create(Object,TweenInfo.new(math.clamp(Smoothness,0,1),Enum.EasingStyle.Sine),{Position=UDim2.new(0,Mouse.X-StartPosition.X,0,Mouse.Y-StartPosition.Y)}):Play();
+        end;
+    end);
+end;
+return UI;
