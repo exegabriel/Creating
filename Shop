@@ -71,7 +71,7 @@ Shop.CreateItem=function(Configuration)
             TextButton.Desc.Text=Configuration.ItemDescription;
             TextButton.ImageLabel.Image=Https.Functions.LoadCustomAsset(Configuration.ImageID);
             TextButton.Price.Text=Configuration.Price;
-            if not Configuration.Stack[1] or Configuration.Stack[2]<1 then
+            if not Configuration.Stack[1] or Configuration.Stack[2]<=1 then
                 TextButton.Stack.Visible=false;
             else
                 TextButton.Stack.Visible=true;
